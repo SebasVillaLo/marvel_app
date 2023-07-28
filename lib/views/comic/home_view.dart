@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/comic_model.dart';
+import '../../providers/providers.dart';
 import '../../utils/utils.dart';
-import '../../viewmodels/viewmodels.dart';
+import '../../widgets/shared/loading_full_screen.dart';
+import '../views.dart';
 
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
@@ -31,7 +33,7 @@ class HomeViewState extends ConsumerState<HomeView> {
         });
       }
     });
-    ref.read(listComicViewModelProvider.notifier).getComics();
+    ref.read(listComicProvider.notifier).getComics();
   }
 
   @override
@@ -42,20 +44,10 @@ class HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final comics = ref.watch(listComicViewModelProvider);
+    final comics = ref.watch(listComicProvider);
+    final comicsNotifier = ref.watch(listComicProvider.notifier);
     final colors = Theme.of(context).colorScheme;
     final Size size = MediaQuery.of(context).size;
-
-    if (comics.isEmpty) {
-      return Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(
-            strokeWidth: 4,
-            backgroundColor: colors.primaryContainer,
-          ),
-        ),
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -65,21 +57,52 @@ class HomeViewState extends ConsumerState<HomeView> {
         ),
         centerTitle: true,
       ),
-      body: ListView.builder(
-        controller: _scrollController,
-        itemCount: comics.length,
-        itemBuilder: (context, index) {
-          final comic = comics[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: FadeIn(
-              child: _Card(
-                  comic: comic,
-                  image:
-                      '${comics[index].thumbnail!.path!}/portrait_xlarge.${comics[index].thumbnail!.exten!.name.toLowerCase()}'),
+      body: Stack(
+        children: [
+          RefreshIndicator(
+            onRefresh: () async {
+              await ref.read(listComicProvider.notifier).onRefresh();
+            },
+            child: ListView.builder(
+              controller: _scrollController,
+              itemCount: comics.length,
+              itemBuilder: (context, index) {
+                final comic = comics[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: FadeInUp(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) {
+                          return ComicDetail(
+                            comic: comic,
+                          );
+                        }));
+                      },
+                      child: _Card(
+                        comic: comic,
+                        image:
+                            '${comic.thumbnail!.path!}/portrait_xlarge.${comic.thumbnail!.exten!.name.toLowerCase()}',
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        },
+          ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            top: comicsNotifier.isLoading ? 0 : size.height,
+            bottom: comicsNotifier.isLoading ? 0 : -size.height,
+            child: Container(
+              height: size.height,
+              width: size.width,
+              color: colors.background,
+              child: const LoadingFullScreen(),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: _showButton
           ? FloatingActionButton(
@@ -96,7 +119,7 @@ class HomeViewState extends ConsumerState<HomeView> {
 
 class _Card extends StatelessWidget {
   const _Card({required this.comic, required this.image});
-  final ComicsModel comic;
+  final ComicModel comic;
   final String image;
 
   @override
@@ -135,6 +158,14 @@ class _Card extends StatelessWidget {
                     comic.title!,
                     maxLines: 2,
                     style: textStyle.titleMedium,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    comic.description!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: textStyle.bodySmall,
                   ),
                 ],
               ),
