@@ -13,3 +13,4 @@ linter:
     prefer_is_not_empty: true
     avoid_empty_else: true
     avoid_function_literals_in_foreach_calls: true
+    constant_identifier_names: false
