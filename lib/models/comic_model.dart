@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class ComicsModel {
+class ComicModel {
   int? id;
   int? digitalId;
   String? title;
@@ -10,28 +10,28 @@ class ComicsModel {
   String? modified;
   Isbn? isbn;
   String? upc;
-  DiamondCode? diamondCode;
+  DiamondCodeComics? diamondCode;
   String? ean;
   String? issn;
-  Format? format;
+  FormatComics? format;
   int? pageCount;
   List<TextObject>? textObjects;
   String? resourceUri;
   List<Url>? urls;
-  Series? series;
-  List<Series>? variants;
+  SeriesComics? series;
+  List<SeriesComics>? variants;
   List<dynamic>? collections;
-  List<Series>? collectedIssues;
-  List<Date>? dates;
-  List<Price>? prices;
-  Thumbnail? thumbnail;
-  List<Thumbnail>? images;
-  Creators? creators;
-  Characters? characters;
-  Stories? stories;
-  Characters? events;
+  List<SeriesComics>? collectedIssues;
+  List<DateComics>? dates;
+  List<PriceComics>? prices;
+  ThumbnailComics? thumbnail;
+  List<ThumbnailComics>? images;
+  CreatorsComics? creators;
+  CharactersComics? characters;
+  StoriesComics? stories;
+  CharactersComics? events;
 
-  ComicsModel({
+  ComicModel({
     this.id,
     this.digitalId,
     this.title,
@@ -63,25 +63,27 @@ class ComicsModel {
     this.events,
   });
 
-  factory ComicsModel.fromRawJson(String str) =>
-      ComicsModel.fromJson(json.decode(str));
+  factory ComicModel.fromRawJson(String str) =>
+      ComicModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory ComicsModel.fromJson(Map<String, dynamic> json) => ComicsModel(
+  factory ComicModel.fromJson(Map<String, dynamic> json) => ComicModel(
         id: json['id'],
         digitalId: json['digitalId'],
         title: json['title'],
         issueNumber: json['issueNumber'],
         variantDescription: json['variantDescription'],
-        description: json['description'],
+        description: json['description'] == null || json['description'] == ''
+            ? 'Not available description'
+            : json['description'],
         modified: json['modified'],
-        isbn: isbnValues.map[json['isbn']]!,
+        isbn: isbnValues.map[json['isbn']],
         upc: json['upc'],
-        diamondCode: diamondCodeValues.map[json['diamondCode']]!,
+        diamondCode: diamondCodeValuesComics.map[json['diamondCode']],
         ean: json['ean'],
         issn: json['issn'],
-        format: formatValues.map[json['format']]!,
+        format: formatValuesComics.map[json['format']],
         pageCount: json['pageCount'],
         textObjects: json['textObjects'] == null
             ? []
@@ -91,41 +93,47 @@ class ComicsModel {
         urls: json['urls'] == null
             ? []
             : List<Url>.from(json['urls']!.map((x) => Url.fromJson(x))),
-        series: json['series'] == null ? null : Series.fromJson(json['series']),
+        series: json['series'] == null
+            ? null
+            : SeriesComics.fromJson(json['series']),
         variants: json['variants'] == null
             ? []
-            : List<Series>.from(
-                json['variants']!.map((x) => Series.fromJson(x))),
+            : List<SeriesComics>.from(
+                json['variants']!.map((x) => SeriesComics.fromJson(x))),
         collections: json['collections'] == null
             ? []
             : List<dynamic>.from(json['collections']!.map((x) => x)),
         collectedIssues: json['collectedIssues'] == null
             ? []
-            : List<Series>.from(
-                json['collectedIssues']!.map((x) => Series.fromJson(x))),
+            : List<SeriesComics>.from(
+                json['collectedIssues']!.map((x) => SeriesComics.fromJson(x))),
         dates: json['dates'] == null
             ? []
-            : List<Date>.from(json['dates']!.map((x) => Date.fromJson(x))),
+            : List<DateComics>.from(
+                json['dates']!.map((x) => DateComics.fromJson(x))),
         prices: json['prices'] == null
             ? []
-            : List<Price>.from(json['prices']!.map((x) => Price.fromJson(x))),
+            : List<PriceComics>.from(
+                json['prices']!.map((x) => PriceComics.fromJson(x))),
         thumbnail: json['thumbnail'] == null
             ? null
-            : Thumbnail.fromJson(json['thumbnail']),
+            : ThumbnailComics.fromJson(json['thumbnail']),
         images: json['images'] == null
             ? []
-            : List<Thumbnail>.from(
-                json['images']!.map((x) => Thumbnail.fromJson(x))),
+            : List<ThumbnailComics>.from(
+                json['images']!.map((x) => ThumbnailComics.fromJson(x))),
         creators: json['creators'] == null
             ? null
-            : Creators.fromJson(json['creators']),
+            : CreatorsComics.fromJson(json['creators']),
         characters: json['characters'] == null
             ? null
-            : Characters.fromJson(json['characters']),
-        stories:
-            json['stories'] == null ? null : Stories.fromJson(json['stories']),
-        events:
-            json['events'] == null ? null : Characters.fromJson(json['events']),
+            : CharactersComics.fromJson(json['characters']),
+        stories: json['stories'] == null
+            ? null
+            : StoriesComics.fromJson(json['stories']),
+        events: json['events'] == null
+            ? null
+            : CharactersComics.fromJson(json['events']),
       );
 
   Map<String, dynamic> toJson() => {
@@ -138,10 +146,10 @@ class ComicsModel {
         'modified': modified,
         'isbn': isbnValues.reverse[isbn],
         'upc': upc,
-        'diamondCode': diamondCodeValues.reverse[diamondCode],
+        'diamondCode': diamondCodeValuesComics.reverse[diamondCode],
         'ean': ean,
         'issn': issn,
-        'format': formatValues.reverse[format],
+        'format': formatValuesComics.reverse[format],
         'pageCount': pageCount,
         'textObjects': textObjects == null
             ? []
@@ -177,30 +185,32 @@ class ComicsModel {
       };
 }
 
-class Characters {
+class CharactersComics {
   int? available;
   String? collectionUri;
-  List<Series>? items;
+  List<SeriesComics>? items;
   int? returned;
 
-  Characters({
+  CharactersComics({
     this.available,
     this.collectionUri,
     this.items,
     this.returned,
   });
 
-  factory Characters.fromRawJson(String str) =>
-      Characters.fromJson(json.decode(str));
+  factory CharactersComics.fromRawJson(String str) =>
+      CharactersComics.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Characters.fromJson(Map<String, dynamic> json) => Characters(
+  factory CharactersComics.fromJson(Map<String, dynamic> json) =>
+      CharactersComics(
         available: json['available'],
         collectionUri: json['collectionURI'],
         items: json['items'] == null
             ? []
-            : List<Series>.from(json['items']!.map((x) => Series.fromJson(x))),
+            : List<SeriesComics>.from(
+                json['items']!.map((x) => SeriesComics.fromJson(x))),
         returned: json['returned'],
       );
 
@@ -214,20 +224,21 @@ class Characters {
       };
 }
 
-class Series {
+class SeriesComics {
   String? resourceUri;
   String? name;
 
-  Series({
+  SeriesComics({
     this.resourceUri,
     this.name,
   });
 
-  factory Series.fromRawJson(String str) => Series.fromJson(json.decode(str));
+  factory SeriesComics.fromRawJson(String str) =>
+      SeriesComics.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Series.fromJson(Map<String, dynamic> json) => Series(
+  factory SeriesComics.fromJson(Map<String, dynamic> json) => SeriesComics(
         resourceUri: json['resourceURI'],
         name: json['name'],
       );
@@ -238,31 +249,31 @@ class Series {
       };
 }
 
-class Creators {
+class CreatorsComics {
   int? available;
   String? collectionUri;
-  List<CreatorsItem>? items;
+  List<CreatorsItemComics>? items;
   int? returned;
 
-  Creators({
+  CreatorsComics({
     this.available,
     this.collectionUri,
     this.items,
     this.returned,
   });
 
-  factory Creators.fromRawJson(String str) =>
-      Creators.fromJson(json.decode(str));
+  factory CreatorsComics.fromRawJson(String str) =>
+      CreatorsComics.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Creators.fromJson(Map<String, dynamic> json) => Creators(
+  factory CreatorsComics.fromJson(Map<String, dynamic> json) => CreatorsComics(
         available: json['available'],
         collectionUri: json['collectionURI'],
         items: json['items'] == null
             ? []
-            : List<CreatorsItem>.from(
-                json['items']!.map((x) => CreatorsItem.fromJson(x))),
+            : List<CreatorsItemComics>.from(
+                json['items']!.map((x) => CreatorsItemComics.fromJson(x))),
         returned: json['returned'],
       );
 
@@ -276,36 +287,37 @@ class Creators {
       };
 }
 
-class CreatorsItem {
+class CreatorsItemComics {
   String? resourceUri;
   String? name;
-  Role? role;
+  RoleComics? role;
 
-  CreatorsItem({
+  CreatorsItemComics({
     this.resourceUri,
     this.name,
     this.role,
   });
 
-  factory CreatorsItem.fromRawJson(String str) =>
-      CreatorsItem.fromJson(json.decode(str));
+  factory CreatorsItemComics.fromRawJson(String str) =>
+      CreatorsItemComics.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory CreatorsItem.fromJson(Map<String, dynamic> json) => CreatorsItem(
+  factory CreatorsItemComics.fromJson(Map<String, dynamic> json) =>
+      CreatorsItemComics(
         resourceUri: json['resourceURI'],
         name: json['name'],
-        role: roleValues.map[json['role']]!,
+        role: roleValuesComics.map[json['role']],
       );
 
   Map<String, dynamic> toJson() => {
         'resourceURI': resourceUri,
         'name': name,
-        'role': roleValues.reverse[role],
+        'role': roleValuesComics.reverse[role],
       };
 }
 
-enum Role {
+enum RoleComics {
   COLORIST,
   EDITOR,
   INKER,
@@ -316,92 +328,99 @@ enum Role {
   WRITER
 }
 
-final roleValues = EnumValues({
-  'colorist': Role.COLORIST,
-  'editor': Role.EDITOR,
-  'inker': Role.INKER,
-  'letterer': Role.LETTERER,
-  'penciler': Role.PENCILER,
-  'penciller': Role.PENCILLER,
-  'penciller (cover)': Role.PENCILLER_COVER,
-  'writer': Role.WRITER
+final roleValuesComics = EnumValues({
+  'colorist': RoleComics.COLORIST,
+  'editor': RoleComics.EDITOR,
+  'inker': RoleComics.INKER,
+  'letterer': RoleComics.LETTERER,
+  'penciler': RoleComics.PENCILER,
+  'penciller': RoleComics.PENCILLER,
+  'penciller (cover)': RoleComics.PENCILLER_COVER,
+  'writer': RoleComics.WRITER
 });
 
-class Date {
-  DateType? type;
+class DateComics {
+  DateTypeComics? type;
   String? date;
 
-  Date({
+  DateComics({
     this.type,
     this.date,
   });
 
-  factory Date.fromRawJson(String str) => Date.fromJson(json.decode(str));
+  factory DateComics.fromRawJson(String str) =>
+      DateComics.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Date.fromJson(Map<String, dynamic> json) => Date(
-        type: dateTypeValues.map[json['type']]!,
+  factory DateComics.fromJson(Map<String, dynamic> json) => DateComics(
+        type: dateTypeValuesComics.map[json['type']]!,
         date: json['date'],
       );
 
   Map<String, dynamic> toJson() => {
-        'type': dateTypeValues.reverse[type],
+        'type': dateTypeValuesComics.reverse[type],
         'date': date,
       };
 }
 
-enum DateType { DIGITAL_PURCHASE_DATE, FOC_DATE, ONSALE_DATE, UNLIMITED_DATE }
+enum DateTypeComics {
+  DIGITAL_PURCHASE_DATE,
+  FOC_DATE,
+  ONSALE_DATE,
+  UNLIMITED_DATE
+}
 
-final dateTypeValues = EnumValues({
-  'digitalPurchaseDate': DateType.DIGITAL_PURCHASE_DATE,
-  'focDate': DateType.FOC_DATE,
-  'onsaleDate': DateType.ONSALE_DATE,
-  'unlimitedDate': DateType.UNLIMITED_DATE
+final dateTypeValuesComics = EnumValues({
+  'digitalPurchaseDate': DateTypeComics.DIGITAL_PURCHASE_DATE,
+  'focDate': DateTypeComics.FOC_DATE,
+  'onsaleDate': DateTypeComics.ONSALE_DATE,
+  'unlimitedDate': DateTypeComics.UNLIMITED_DATE
 });
 
-enum DiamondCode { EMPTY, JUL190068 }
+enum DiamondCodeComics { EMPTY, JUL190068 }
 
-final diamondCodeValues =
-    EnumValues({'': DiamondCode.EMPTY, 'JUL190068': DiamondCode.JUL190068});
+final diamondCodeValuesComics = EnumValues(
+    {'': DiamondCodeComics.EMPTY, 'JUL190068': DiamondCodeComics.JUL190068});
 
-enum Format { COMIC, DIGEST, EMPTY, TRADE_PAPERBACK }
+enum FormatComics { COMIC, DIGEST, EMPTY, TRADE_PAPERBACK }
 
-final formatValues = EnumValues({
-  'Comic': Format.COMIC,
-  'Digest': Format.DIGEST,
-  '': Format.EMPTY,
-  'Trade Paperback': Format.TRADE_PAPERBACK
+final formatValuesComics = EnumValues({
+  'Comic': FormatComics.COMIC,
+  'Digest': FormatComics.DIGEST,
+  '': FormatComics.EMPTY,
+  'Trade Paperback': FormatComics.TRADE_PAPERBACK
 });
 
-class Thumbnail {
+class ThumbnailComics {
   String? path;
-  Extension? exten;
+  ExtensionComics? exten;
 
-  Thumbnail({
+  ThumbnailComics({
     this.path,
     this.exten,
   });
 
-  factory Thumbnail.fromRawJson(String str) =>
-      Thumbnail.fromJson(json.decode(str));
+  factory ThumbnailComics.fromRawJson(String str) =>
+      ThumbnailComics.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Thumbnail.fromJson(Map<String, dynamic> json) => Thumbnail(
+  factory ThumbnailComics.fromJson(Map<String, dynamic> json) =>
+      ThumbnailComics(
         path: json['path'],
-        exten: extensionValues.map[json['extension']]!,
+        exten: extensionValuesComics.map[json['extension']]!,
       );
 
   Map<String, dynamic> toJson() => {
         'path': path,
-        'extension': extensionValues.reverse[exten],
+        'extension': extensionValuesComics.reverse[exten],
       };
 }
 
-enum Extension { JPG }
+enum ExtensionComics { JPG }
 
-final extensionValues = EnumValues({'jpg': Extension.JPG});
+final extensionValuesComics = EnumValues({'jpg': ExtensionComics.JPG});
 
 enum Isbn { EMPTY, THE_0785111298, THE_0785114513, THE_0785115609 }
 
@@ -412,61 +431,63 @@ final isbnValues = EnumValues({
   '0-7851-1560-9': Isbn.THE_0785115609
 });
 
-class Price {
-  PriceType? type;
+class PriceComics {
+  PriceTypeComics? type;
   double? price;
 
-  Price({
+  PriceComics({
     this.type,
     this.price,
   });
 
-  factory Price.fromRawJson(String str) => Price.fromJson(json.decode(str));
+  factory PriceComics.fromRawJson(String str) =>
+      PriceComics.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Price.fromJson(Map<String, dynamic> json) => Price(
-        type: priceTypeValues.map[json['type']]!,
+  factory PriceComics.fromJson(Map<String, dynamic> json) => PriceComics(
+        type: priceTypeValuesComics.map[json['type']]!,
         price: json['price']?.toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
-        'type': priceTypeValues.reverse[type],
+        'type': priceTypeValuesComics.reverse[type],
         'price': price,
       };
 }
 
-enum PriceType { DIGITAL_PURCHASE_PRICE, PRINT_PRICE }
+enum PriceTypeComics { DIGITAL_PURCHASE_PRICE, PRINT_PRICE }
 
-final priceTypeValues = EnumValues({
-  'digitalPurchasePrice': PriceType.DIGITAL_PURCHASE_PRICE,
-  'printPrice': PriceType.PRINT_PRICE
+final priceTypeValuesComics = EnumValues({
+  'digitalPurchasePrice': PriceTypeComics.DIGITAL_PURCHASE_PRICE,
+  'printPrice': PriceTypeComics.PRINT_PRICE
 });
 
-class Stories {
+class StoriesComics {
   int? available;
   String? collectionUri;
-  List<StoriesItem>? items;
+  List<StoriesItemComics>? items;
   int? returned;
 
-  Stories({
+  StoriesComics({
     this.available,
     this.collectionUri,
     this.items,
     this.returned,
   });
 
-  factory Stories.fromRawJson(String str) => Stories.fromJson(json.decode(str));
+  factory StoriesComics.fromRawJson(String str) =>
+      StoriesComics.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Stories.fromJson(Map<String, dynamic> json) => Stories(
+  factory StoriesComics.fromJson(Map<String, dynamic> json) => StoriesComics(
         available: json['available'],
         collectionUri: json['collectionURI'],
         items: json['items'] == null
             ? []
-            : List<StoriesItem>.from(
-                json['items']!.map((x) => StoriesItem.fromJson(x))),
+            : List<StoriesItemComics>.from(
+                json['items']!.map((x) => StoriesItemComics.fromJson(x))),
         returned: json['returned'],
       );
 
@@ -480,26 +501,27 @@ class Stories {
       };
 }
 
-class StoriesItem {
+class StoriesItemComics {
   String? resourceUri;
   String? name;
   ItemType? type;
 
-  StoriesItem({
+  StoriesItemComics({
     this.resourceUri,
     this.name,
     this.type,
   });
 
-  factory StoriesItem.fromRawJson(String str) =>
-      StoriesItem.fromJson(json.decode(str));
+  factory StoriesItemComics.fromRawJson(String str) =>
+      StoriesItemComics.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory StoriesItem.fromJson(Map<String, dynamic> json) => StoriesItem(
+  factory StoriesItemComics.fromJson(Map<String, dynamic> json) =>
+      StoriesItemComics(
         resourceUri: json['resourceURI'],
         name: json['name'],
-        type: itemTypeValues.map[json['type']]!,
+        type: itemTypeValues.map[json['type']],
       );
 
   Map<String, dynamic> toJson() => {
@@ -534,8 +556,8 @@ class TextObject {
   String toRawJson() => json.encode(toJson());
 
   factory TextObject.fromJson(Map<String, dynamic> json) => TextObject(
-        type: textObjectTypeValues.map[json['type']]!,
-        language: languageValues.map[json['language']]!,
+        type: textObjectTypeValues.map[json['type']],
+        language: languageValues.map[json['language']],
         text: json['text'],
       );
 
