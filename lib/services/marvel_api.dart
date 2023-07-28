@@ -3,15 +3,30 @@ import 'config/dio_config.dart';
 
 class MarvelApi extends DioConfig {
   final dio = DioConfig.dio;
-  Future<List<ComicsModel>> getComics() async {
+  Future<List<ComicModel>> getComics() async {
     try {
-      final response = await dio.get('/v1/public/comics');
+      final response = await dio.get('/v1/public/comics?limit=99');
       if (response.statusCode == 200) {
         return (response.data['data']['results'] as List)
-            .map((e) => ComicsModel.fromJson(e))
+            .map((comic) => ComicModel.fromJson(comic))
             .toList();
       } else {
-        throw Exception('Error al obtener los datos');
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<CharacterModel>> getCharacters(String id) async {
+    try {
+      final response = await dio.get('/v1/public/comics/$id/characters');
+      if (response.statusCode == 200) {
+        return (response.data['data']['results'] as List)
+            .map((character) => CharacterModel.fromJson(character))
+            .toList();
+      } else {
+        throw Exception(response.data.toString());
       }
     } catch (e) {
       rethrow;
