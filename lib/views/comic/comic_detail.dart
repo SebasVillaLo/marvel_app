@@ -95,7 +95,7 @@ class _ComicBody extends StatelessWidget {
             ],
           ),
         ),
-        _ActorsByMovie(),
+        _ActorsByComic(),
       ],
     );
   }
@@ -170,7 +170,7 @@ class _CustomSliverAppBar extends StatelessWidget {
   }
 }
 
-class _ActorsByMovie extends ConsumerWidget {
+class _ActorsByComic extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final characters = ref.watch(listCharacterProvider);
