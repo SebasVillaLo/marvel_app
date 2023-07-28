@@ -18,6 +18,11 @@ class _ComicDetailState extends ConsumerState<ComicDetail> {
   @override
   void initState() {
     super.initState();
+
+    // Call the 'getComics' method of the 'listCharacterProvider' notifier
+    // to fetch the list of characters associated with the given comic ID.
+    // The comic ID is obtained from the 'widget.comic.id' property.
+    // Note: It's assumed that 'widget.comic.id' is not null, as indicated by the '!' operator.
     ref
         .read(listCharacterProvider.notifier)
         .getComics(widget.comic.id!.toString());

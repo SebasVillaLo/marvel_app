@@ -22,6 +22,10 @@ class HomeViewState extends ConsumerState<HomeView> {
   @override
   void initState() {
     super.initState();
+
+    // Add a listener to the scroll controller to detect the scroll offset.
+    // If the offset is greater than or equal to 100, show the button.
+    // Otherwise, hide the button.
     _scrollController.addListener(() {
       if (_scrollController.offset >= 100) {
         setState(() {
@@ -33,11 +37,15 @@ class HomeViewState extends ConsumerState<HomeView> {
         });
       }
     });
+
+    // Call the 'getComics' method of the 'listComicProvider' notifier
+    // to fetch the list of comics when the widget is initialized.
     ref.read(listComicProvider.notifier).getComics();
   }
 
   @override
   void dispose() {
+    // Dispose of the scroll controller to avoid memory leaks.
     _scrollController.dispose();
     super.dispose();
   }
