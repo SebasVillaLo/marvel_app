@@ -32,4 +32,20 @@ class MarvelApi extends DioConfig {
       rethrow;
     }
   }
+
+  Future<List<ComicModel>> searchComics(String query) async {
+    try {
+      final response =
+          await dio.get('/v1/public/comics?titleStartsWith=$query&limit=99');
+      if (response.statusCode == 200) {
+        return (response.data['data']['results'] as List)
+            .map((comic) => ComicModel.fromJson(comic))
+            .toList();
+      } else {
+        throw Exception(response.data.toString());
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
