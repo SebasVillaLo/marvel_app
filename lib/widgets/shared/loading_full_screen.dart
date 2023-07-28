@@ -5,9 +5,9 @@ class LoadingFullScreen extends StatelessWidget {
 
   Stream<String> getLoadingMessages() {
     final message = <String>[
+      'Espero que esto no tarde 😁',
       'Cargando comics',
-      'Ya mero...',
-      'Esto esta tardando mas de lo esperado :('
+      'Esto esta tardando mas de lo esperado 😴'
     ];
     return Stream.periodic(const Duration(milliseconds: 1200), (step) {
       return message[step];
