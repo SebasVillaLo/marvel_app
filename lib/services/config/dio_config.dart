@@ -6,14 +6,14 @@ import 'package:dio/dio.dart';
 import '../../utils/utils.dart';
 
 class DioConfig {
-  static final _date = DateTime.now();
+  static final _date = DateTime.now().toString().split(' ').join('');
   static final dio = Dio(BaseOptions(
     baseUrl: 'http://gateway.marvel.com',
+    validateStatus: (_) => true,
     queryParameters: {
       'ts': _date,
-      'api_key': Environment.apiKeyPublic,
+      'apikey': Environment.apiKeyPublic,
       'hash': _generateHash(),
-      'lenguage': 'es-MX',
     },
   ));
 
