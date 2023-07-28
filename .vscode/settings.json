@@ -1,0 +1,10 @@
+{
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "dart.flutterSdkPath": "C:\\Users\\Super\\developer\\flutterv3.10.6",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true,
+    "dart.showTodos": true,
+    "dart.enableSuperMixins":true,
+  }
+}
