@@ -24,15 +24,18 @@ class ComicCard extends StatelessWidget {
               width: size.width * 0.2,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(image,
-                    loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress != null) {
-                    return const CircularProgressIndicator(
-                      strokeWidth: 2,
-                    );
-                  }
-                  return FadeIn(child: child);
-                }),
+                child: Image.network(
+                  image,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress != null) {
+                      return const CircularProgressIndicator(
+                        strokeWidth: 2,
+                      );
+                    }
+                    return FadeIn(child: child);
+                  },
+                ),
               ),
             ),
             const SizedBox(width: 10),

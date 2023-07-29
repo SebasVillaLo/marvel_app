@@ -41,6 +41,7 @@ class SearchComicDelegate extends SearchDelegate<ComicModel?> {
 
   /// Method that gets called whenever the user types in the search field
   void _onQueryChanged(String query) {
+    if (query.isEmpty) return; // if query is empty, do nothing
     if (query.isNotEmpty) isLoadingStream.add(true); // Notify loading started
 
     if (_debounceTimer?.isActive ?? false) {

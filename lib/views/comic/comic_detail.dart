@@ -134,11 +134,11 @@ class _CustomSliverAppBar extends StatelessWidget {
                 fit: BoxFit.cover,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) {
-                    return child; // Show the image when loading is complete.
+                    return FadeIn(
+                      child: child,
+                    );
                   }
-                  return const Center(
-                      child:
-                          CircularProgressIndicator()); // Show a loading indicator during image loading.
+                  return const Center(child: CircularProgressIndicator());
                 },
               ),
             ),

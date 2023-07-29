@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../providers/providers.dart';
-import '../../utils/utils.dart';
 import '../../widgets/widgets.dart';
 import '../delegate/search_delegate.dart';
 import '../views.dart';
@@ -54,11 +53,24 @@ class HomeViewState extends ConsumerState<HomeView> {
   Widget build(BuildContext context) {
     final comics = ref.watch(listComicProvider);
     final comicsNotifier = ref.watch(listComicProvider.notifier);
+    final searchProvider = ref.watch(searchedComicsProvider.notifier);
     final colors = Theme.of(context).colorScheme;
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: const AppBarCustom(),
+      appBar: AppBarCustom(
+        icon: Icon(
+          comicsNotifier.isLoading ? null : Icons.search,
+          color: Colors.black,
+        ),
+        onPressed: () {
+          showSearch(
+            context: context,
+            delegate: SearchComicDelegate(
+                searchComicByQuery: searchProvider.searchComicByQuery),
+          );
+        },
+      ),
       body: Stack(
         children: [
           RefreshIndicator(
@@ -117,37 +129,4 @@ class HomeViewState extends ConsumerState<HomeView> {
           : null,
     );
   }
-}
-
-class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
-  const AppBarCustom({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final searchProvider = ref.watch(searchedComicsProvider.notifier);
-    return AppBar(
-      title: const Text(
-        'Cómics',
-        style: titleAppBar,
-      ),
-      centerTitle: true,
-      actions: [
-        IconButton(
-          onPressed: () {
-            showSearch(
-              context: context,
-              delegate: SearchComicDelegate(
-                  searchComicByQuery: searchProvider.searchComicByQuery),
-            );
-          },
-          icon: const Icon(Icons.search, color: Colors.black),
-        )
-      ],
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(60);
 }
