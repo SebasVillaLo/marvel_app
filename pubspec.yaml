@@ -14,19 +14,7 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^2.3.6
   crypto: ^3.0.3
-  flutter_native_splash: ^2.3.1
   flutter_launcher_icons: ^0.13.1
-
-flutter_native_splash:
-  color: "#EA3237"
-  image: assets/icon/logo.jpg
-  android: true
-  ios: true
-  android_12:
-    image: assets/icon/logo.jpg
-    icon_background_color: "#EA3237"
-    image_dark: assets/icon/logo.jpg
-    icon_background_color_dark: "#EA3237"
 
 flutter_icons:
   android: true
