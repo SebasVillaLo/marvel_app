@@ -14,6 +14,15 @@ dependencies:
     sdk: flutter
   flutter_riverpod: ^2.3.6
   crypto: ^3.0.3
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: assets/icon/logo.jpg
+  macos:
+    generate: true
+    image_path: assets/icon/logo.jpg
 
 dev_dependencies:
   flutter_test:
@@ -25,3 +34,4 @@ flutter:
 
   assets:
     - .env
+    - assets/icon/

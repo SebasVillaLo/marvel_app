@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../utils/utils.dart';
 
-class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
+class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
   const AppBarCustom({
     this.onPressed,
     required this.icon,
@@ -14,10 +13,10 @@ class AppBarCustom extends ConsumerWidget implements PreferredSizeWidget {
   final Widget icon;
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     return AppBar(
       title: const Text(
-        'Cómics',
+        'Comics',
         style: titleAppBar,
       ),
       centerTitle: true,

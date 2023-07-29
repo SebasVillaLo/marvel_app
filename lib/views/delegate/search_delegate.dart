@@ -17,7 +17,7 @@ typedef ComicsStream = StreamController<List<ComicModel>>;
 class SearchComicDelegate extends SearchDelegate<ComicModel?> {
   // Constructor to receive a search callback function
   SearchComicDelegate({required this.searchComicByQuery})
-      : super(searchFieldLabel: 'Buscar comics'); // Super constructor call
+      : super(searchFieldLabel: 'Search comics'); // Super constructor call
 
   // Callback function to search for comics
   SearchComicCallback searchComicByQuery;
